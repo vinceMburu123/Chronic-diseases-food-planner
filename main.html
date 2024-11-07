@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Meal Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .form-container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"],
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .result {
+            max-width: 400px;
+            padding: 15px;
+            background-color: #e0f7fa;
+            border: 1px solid #4dd0e1;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #00796b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Patient Meal Recommendation</h2>
+    <form id="patientForm">
+        <label for="name">Patient Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="condition">Chronic Condition:</label>
+        <select id="condition" required>
+            <option value="" disabled selected>Select Condition</option>
+            <option value="diabetes">Diabetes</option>
+            <option value="hypertension">Hypertension</option>
+            <option value="both">Both Diabetes and Hypertension</option>
+        </select>
+        
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+</div>
+
+<div id="result" class="result" style="display: none;"></div>
+
+<script>
+    function submitForm() {
+        const name = document.getElementById("name").value;
+        const condition = document.getElementById("condition").value;
+        let mealPlan = '';
+
+        if (condition === 'diabetes') {
+            mealPlan = `
+                <strong>Recommended Meals for Diabetes:</strong><br>
+                <b>Morning:</b> Whole grains, eggs, vegetables<br>
+                <b>Lunch:</b> Lean protein, green leafy vegetables, whole grains<br>
+                <b>Dinner:</b> Fish or tofu, salad with olive oil, quinoa
+            `;
+        } else if (condition === 'hypertension') {
+            mealPlan = `
+                <strong>Recommended Meals for Hypertension:</strong><br>
+                <b>Morning:</b> Oatmeal, fruits like bananas, and nuts<br>
+                <b>Lunch:</b> Grilled chicken, mixed vegetables, brown rice<br>
+                <b>Dinner:</b> Baked salmon, sweet potatoes, steamed greens
+            `;
+        } else if (condition === 'both') {
+            mealPlan = `
+                <strong>Recommended Meals for Diabetes and Hypertension:</strong><br>
+                <b>Morning:</b> High-fiber cereals, low-fat dairy, berries<br>
+                <b>Lunch:</b> Turkey or chicken breast, non-starchy vegetables, quinoa<br>
+                <b>Dinner:</b> Grilled fish, leafy greens, a small portion of whole grains
+            `;
+        }
+
+        document.getElementById("result").innerHTML = `
+            <h2>Meal Plan for ${name}</h2>
+            ${mealPlan}
+        `;
+        document.getElementById("result").style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
