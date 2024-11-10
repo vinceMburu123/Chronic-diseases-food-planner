@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Meal Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .form-container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"],
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .result {
+            max-width: 400px;
+            padding: 15px;
+            background-color: #e0f7fa;
+            border: 1px solid #4dd0e1;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #00796b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Patient Meal Recommendation</h2>
+    <form id="patientForm">
+        <label for="name">Patient Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="condition">Chronic Condition:</label>
+        <select id="condition" required>
+            <option value="" disabled selected>Select Condition</option>
+            <option value="diabetes">Diabetes</option>
+            <option value="hypertension">Hypertension</option>
+            <option value="both">Both Diabetes and Hypertension</option>
+            <option value="cardiovascular">Cardiovascular Disease</option>
+        </select>
+        
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+</div>
+
+<div id="result" class="result" style="display: none;"></div>
+
+<script>
+    function submitForm() {
+        const name = document.getElementById("name").value;
+        const condition = document.getElementById("condition").value;
+        let mealPlan = '';
+        
+        const diabetesMeals = {
+            Monday: ["Oatmeal with nuts and berries", "Grilled chicken with quinoa and vegetables", "Baked fish with steamed greens"],
+            Tuesday: ["Scrambled eggs with vegetables", "Turkey salad with spinach and avocado", "Tofu stir-fry with broccoli and carrots"],
+            Wednesday: ["Greek yogurt with chia seeds", "Salmon salad with mixed greens", "Chicken breast with green beans and brown rice"],
+            Thursday: ["Whole grain toast with avocado", "Lean beef with vegetable soup", "Grilled shrimp with salad"],
+            Friday: ["Smoothie with spinach, berries, and protein powder", "Veggie wrap with hummus and lean turkey", "Quinoa bowl with black beans and salsa"],
+            Saturday: ["Cottage cheese with fruit", "Baked chicken with a side of sweet potato", "Stir-fried tofu with mushrooms and zucchini"],
+            Sunday: ["High-fiber cereal with almond milk", "Fish tacos with cabbage slaw", "Vegetable soup with whole grain roll"]
+        };
+
+        const hypertensionMeals = {
+            Monday: ["Banana smoothie with oats", "Baked chicken with brown rice", "Vegetable stir-fry with tofu"],
+            Tuesday: ["Egg whites with whole grain toast", "Grilled salmon with leafy greens", "Sweet potato with turkey breast"],
+            Wednesday: ["Greek yogurt with sliced fruit", "Chicken salad with bell peppers", "Whole grain pasta with marinara sauce"],
+            Thursday: ["Oatmeal with sliced bananas", "Steamed fish with mixed veggies", "Roasted chicken with asparagus"],
+            Friday: ["Green smoothie with kale and apple", "Quinoa salad with chickpeas", "Baked salmon with a small baked potato"],
+            Saturday: ["Cottage cheese and berries", "Turkey wrap with low-sodium ingredients", "Lentil soup with side salad"],
+            Sunday: ["Whole grain cereal with fruit", "Vegetable sandwich with avocado", "Steamed broccoli with grilled chicken"]
+        };
+
+        const cardiovascularMeals = {
+            Monday: ["Whole-grain cereal with berries", "Grilled salmon with asparagus", "Turkey breast with green beans"],
+            Tuesday: ["Egg white omelet with spinach", "Quinoa salad with chickpeas", "Baked cod with sweet potatoes"],
+            Wednesday: ["Smoothie with banana, almond milk, and spinach", "Chicken breast with vegetable stew", "Roasted vegetables with tofu"],
+            Thursday: ["Oatmeal with walnuts and berries", "Tuna salad with leafy greens", "Stir-fried veggies with lean beef"],
+            Friday: ["Low-fat yogurt with mixed fruit", "Whole grain wrap with turkey and veggies", "Broiled fish with sautéed greens"],
+            Saturday: ["Scrambled egg whites with avocado", "Brown rice with steamed vegetables", "Vegetable soup with whole grain roll"],
+            Sunday: ["Whole wheat toast with almond butter", "Grilled chicken with quinoa", "Baked potato with mixed vegetables"]
+        };
+
+        const bothMeals = {
+            Monday: ["Oatmeal with almond milk", "Chicken breast with steamed spinach", "Salmon with roasted Brussels sprouts"],
+            Tuesday: ["Scrambled eggs with bell peppers", "Turkey salad with cucumber", "Steamed tofu with green beans"],
+            Wednesday: ["High-fiber cereal with strawberries", "Grilled chicken with quinoa", "Vegetable stir-fry with tofu"],
+            Thursday: ["Whole grain toast with low-fat cream cheese", "Salmon salad with olive oil dressing", "Baked chicken with a small sweet potato"],
+            Friday: ["Fruit smoothie with chia seeds", "Veggie wrap with hummus", "Fish tacos with leafy greens"],
+            Saturday: ["Yogurt with nuts and seeds", "Quinoa bowl with vegetables", "Lentil stew with grilled vegetables"],
+            Sunday: ["Whole grain cereal with milk", "Turkey sandwich with whole wheat bread", "Grilled vegetables with lean meat"]
+        };
+
+        if (condition === 'diabetes') {
+            mealPlan = `<strong>Weekly Meal Plan for Diabetes:</strong><br>`;
+            for (let day in diabetesMeals) {
+                mealPlan += `<b>${day}:</b><br>
+                    <b>Breakfast:</b> ${diabetesMeals[day][0]}<br>
+                    <b>Lunch:</b> ${diabetesMeals[day][1]}<br>
+                    <b>Dinner:</b> ${diabetesMeals[day][2]}<br><br>`;
+            }
+        } else if (condition === 'hypertension') {
+            mealPlan = `<strong>Weekly Meal Plan for Hypertension:</strong><br>`;
+            for (let day in hypertensionMeals) {
+                mealPlan += `<b>${day}:</b><br>
+                    <b>Breakfast:</b> ${hypertensionMeals[day][0]}<br>
+                    <b>Lunch:</b> ${hypertensionMeals[day][1]}<br>
+                    <b>Dinner:</b> ${hypertensionMeals[day][2]}<br><br>`;
+            }
+        } else if (condition === 'both') {
+            mealPlan = `<strong>Weekly Meal Plan for Both Diabetes and Hypertension:</strong><br>`;
+            for (let day in bothMeals) {
+                mealPlan += `<b>${day}:</b><br>
+                    <b>Breakfast:</b> ${bothMeals[day][0]}<br>
+                    <b>Lunch:</b> ${bothMeals[day][1]}<br>
+                    <b>Dinner:</b> ${bothMeals[day][2]}<br><br>`;
+            }
+        } else if (condition === 'cardiovascular') {
+            mealPlan = `<strong>Weekly Meal Plan for Cardiovascular Disease:</strong><br>`;
+            for (let day in cardiovascularMeals) {
+                mealPlan += `<b>${day}:</b><br>
+                    <b>Breakfast:</b> ${cardiovascularMeals[day][0]}<br>
+                    <b>Lunch:</b> ${cardiovascularMeals[day][1]}<br>
+                    <b>Dinner:</b> ${cardiovascularMeals[day][2]}<br><br>`;
+            }
+        }
+
+        document.getElementById("result").innerHTML = `<h2>Meal Plan for ${name}</h2>` + mealPlan;
+        document.getElementById("result").style.display = 'block';
+    }
+</script>
+</body>
+</html>
